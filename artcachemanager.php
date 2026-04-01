@@ -186,7 +186,7 @@ class Artcachemanager extends Module
             'memory_used'            => (int) $mem['used_memory'],
             'memory_free'            => (int) $mem['free_memory'],
             'memory_wasted'          => (int) $mem['wasted_memory'],
-            'used_pct'               => $total > 0 ? round($mem['used_memory'] / $total * 100, 1) : 0,
+            'used_pct'               => (int) $total > 0 ? round($mem['used_memory'] / $total * 100, 1) : 0,
             'wasted_pct'             => round((float) ($mem['current_wasted_percentage'] ?? 0), 2),
             'cached_scripts'         => (int) $stats['num_cached_scripts'],
             'max_cached_keys'        => (int) $stats['max_cached_keys'],
@@ -232,10 +232,11 @@ class Artcachemanager extends Module
         $stats          = $this->fetchMemcachedStats($servers, $useNewExt);
 
         return [
-            'active'  => true,
-            'system'  => $system,
-            'servers' => $servers,
-            'stats'   => $stats,
+            'active'       => true,
+            'system'       => $system,
+            'servers'      => $servers,
+            'server_count' => count($servers),
+            'stats'        => $stats,
         ];
     }
 
@@ -345,7 +346,7 @@ class Artcachemanager extends Module
         try {
             if (class_exists('Cache') && method_exists('Cache', 'getInstance')) {
                 $cache = Cache::getInstance();
-                if ($cache && method_exists($cache, 'flush')) {
+                if (method_exists($cache, 'flush')) {
                     $cache->flush();
                     return true;
                 }

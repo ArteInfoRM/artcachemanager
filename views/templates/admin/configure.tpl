@@ -1,6 +1,12 @@
-{*
- * Art Cache Manager — configure.tpl
- * Compatible with PrestaShop 1.7 → 9.x (Bootstrap 3/4/5 safe)
+ {*
+ * Art Cache Manager
+ *
+ * For support feel free to contact us on our website at https://www.tecnoacquisti.com
+ *
+ * @author    Tecnoacquisti.com <helpdesk@tecnoacquisti.com>
+ * @copyright 2009-2026 Tecnoacquisti.com
+ * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License (AFL) v. 3.0
+ * @version   1.2.0
  *}
 
 <style>
@@ -76,8 +82,8 @@
                     {if $artcm_opcache.used_pct > 80}{assign var="bar_color" value="#d9534f"}{/if}
                     {if $artcm_opcache.used_pct > 60}{assign var="bar_color" value="#f0ad4e"}{/if}
                     <div class="artcm-progress-bar"
-                         style="width:{$artcm_opcache.used_pct|escape:'html':'UTF-8'}%; background:{$bar_color};">
-                         {$artcm_opcache.used_pct|escape:'html':'UTF-8'}%
+                         style="width:{$artcm_opcache.used_pct|floatval}%; background:{$bar_color};">
+                         {$artcm_opcache.used_pct|floatval}%
                     </div>
                 </div>
                 <p class="artcm-note">
@@ -96,8 +102,8 @@
                     {if $artcm_opcache.hit_rate < 80}{assign var="hit_color" value="#f0ad4e"}{/if}
                     {if $artcm_opcache.hit_rate < 50}{assign var="hit_color" value="#d9534f"}{/if}
                     <div class="artcm-progress-bar"
-                         style="width:{$artcm_opcache.hit_rate|escape:'html':'UTF-8'}%; background:{$hit_color};">
-                         {$artcm_opcache.hit_rate|escape:'html':'UTF-8'}%
+                         style="width:{$artcm_opcache.hit_rate|floatval}%; background:{$hit_color};">
+                         {$artcm_opcache.hit_rate|floatval}%
                     </div>
                 </div>
 
@@ -195,7 +201,7 @@
                     </tr>
                     <tr>
                         <th>{l s='Servers configured' mod='artcachemanager'}</th>
-                        <td>{$artcm_memcached.servers|@count}</td>
+                        <td>{$artcm_memcached.server_count|intval}</td>
                     </tr>
                 </table>
 
@@ -217,12 +223,12 @@
                         {if $totals.hit_rate < 80}{assign var="mc_hit_color" value="#f0ad4e"}{/if}
                         {if $totals.hit_rate < 50}{assign var="mc_hit_color" value="#d9534f"}{/if}
                         <div class="artcm-progress-bar"
-                             style="width:{$totals.hit_rate|escape:'html':'UTF-8'}%; background:{$mc_hit_color};">
-                             {$totals.hit_rate|escape:'html':'UTF-8'}%
+                             style="width:{$totals.hit_rate|floatval}%; background:{$mc_hit_color};">
+                             {$totals.hit_rate|floatval}%
                         </div>
                     </div>
                     <p class="artcm-note">
-                        {l s='Hit rate' mod='artcachemanager'}: {$totals.hit_rate|escape:'html':'UTF-8'}%
+                        {l s='Hit rate' mod='artcachemanager'}: {$totals.hit_rate|floatval}%
                         &nbsp;|&nbsp; {l s='Hits' mod='artcachemanager'}: {$totals.hits|intval}
                         &nbsp;|&nbsp; {l s='Misses' mod='artcachemanager'}: {$totals.misses|intval}
                     </p>
@@ -243,7 +249,7 @@
                     </table>
 
                     {* Per-server details *}
-                    {if $artcm_memcached.stats.servers|@count > 1}
+                    {if $artcm_memcached.server_count > 1}
                     <p style="font-weight:600;margin:12px 0 4px;">{l s='Per-server details' mod='artcachemanager'}</p>
                     {foreach from=$artcm_memcached.stats.servers item=srv}
                     <div style="border:1px solid #ddd;border-radius:4px;padding:8px;margin-bottom:8px;">
