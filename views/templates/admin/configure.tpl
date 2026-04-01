@@ -35,6 +35,12 @@
                 <div class="alert alert-warning">
                     {if $artcm_opcache.reason == 'extension_not_loaded'}
                         {l s='OPcache extension is not loaded (opcache.so / zend_extension).' mod='artcachemanager'}
+                    {elseif $artcm_opcache.reason == 'restrict_api'}
+                        {l s='OPcache is active but opcache.restrict_api is set — access from this web path is blocked.' mod='artcachemanager'}
+                        <br><small><code>opcache.restrict_api = {$artcm_opcache.restrict_api|escape:'html':'UTF-8'}</code></small>
+                    {elseif $artcm_opcache.reason == 'disable_functions'}
+                        {l s='OPcache extension is loaded but opcache_get_status() is blocked (disable_functions in php.ini).' mod='artcachemanager'}
+                        <br><small>{l s='This is common on shared hosting — the host disables monitoring functions for security. Statistics are unavailable.' mod='artcachemanager'}</small>
                     {else}
                         {l s='OPcache is disabled (opcache.enable=0 in php.ini / vhost).' mod='artcachemanager'}
                     {/if}
@@ -143,6 +149,19 @@
                         <i class="icon-trash"></i>
                         {l s='Clear OPcache' mod='artcachemanager'}
                     </button>
+                </form>
+            </div>
+            {elseif !$artcm_opcache.available && $artcm_opcache.reason == 'disable_functions' && $artcm_opcache.can_clear}
+            <div class="panel-footer">
+                <form method="post" action="{$artcm_form_action|escape:'html':'UTF-8'}">
+                    <button type="submit" name="artcm_clear_opcache" class="btn btn-warning"
+                            onclick="return confirm('{l s='Clear OPcache now? On shared hosting this resets the cache for the entire server, not just this site.' mod='artcachemanager' js=1}');">
+                        <i class="icon-trash"></i>
+                        {l s='Clear OPcache (blind)' mod='artcachemanager'}
+                    </button>
+                    <p class="help-block artcm-note" style="margin-top:6px;">
+                        {l s='Statistics unavailable (disable_functions), but opcache_reset() is accessible. On shared hosting this affects all sites on the server.' mod='artcachemanager'}
+                    </p>
                 </form>
             </div>
             {/if}

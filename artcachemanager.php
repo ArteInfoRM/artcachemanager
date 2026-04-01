@@ -8,7 +8,7 @@
  * @author    Tecnoacquisti.com <helpdesk@tecnoacquisti.com>
  * @copyright 2009-2026 Tecnoacquisti.com
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License (AFL) v. 3.0
- * @version   1.0.0
+ * @version   1.0.4
  */
 
 if (!defined('_PS_VERSION_')) {
@@ -24,7 +24,7 @@ class Artcachemanager extends Module
     {
         $this->name          = 'artcachemanager';
         $this->tab           = 'administration';
-        $this->version       = '1.0.0';
+        $this->version       = '1.0.4';
         $this->author        = 'Tecnoacquisti.com';
         $this->need_instance = 0;
         $this->bootstrap     = true;
@@ -175,7 +175,24 @@ class Artcachemanager extends Module
     public function getOpcacheStatus(): array
     {
         if (!function_exists('opcache_get_status')) {
-            return ['available' => false, 'reason' => 'extension_not_loaded'];
+            // Distinguish: truly absent vs. blocked by disable_functions / restrict_api
+            if (!extension_loaded('Zend OPcache')) {
+                return ['available' => false, 'reason' => 'extension_not_loaded'];
+            }
+            // Extension IS loaded — function blocked at ini level
+            $restrictApi = ini_get('opcache.restrict_api');
+            if ($restrictApi !== '' && $restrictApi !== false) {
+                return [
+                    'available'    => false,
+                    'reason'       => 'restrict_api',
+                    'restrict_api' => $restrictApi,
+                ];
+            }
+            return [
+                'available'  => false,
+                'reason'     => 'disable_functions',
+                'can_clear'  => function_exists('opcache_reset'),
+            ];
         }
 
         $status = @opcache_get_status(false);

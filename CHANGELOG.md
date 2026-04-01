@@ -7,6 +7,18 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [1.0.4] — 2026-04-01
+
+### Added
+- OPcache detection now distinguishes three failure modes: extension not loaded, `opcache.restrict_api` blocking web-path access (shows the actual path value), and `opcache_get_status` blocked via `disable_functions`
+- **"Clear OPcache (blind)"** button (amber) shown when `opcache_get_status` is blocked by `disable_functions` but `opcache_reset()` is still accessible — typical on shared hosting; confirmation dialog warns that the reset affects the entire server
+- README: new *Shared hosting considerations* section documenting OPcache and Memcached behaviour on shared vs. VPS/dedicated servers, with summary table; module scope clarified as VPS/dedicated only
+
+### Changed
+- Shared hosting notice added to the `disable_functions` warning message in the admin panel
+
+---
+
 ## [1.0.0] — 2026-04-01
 
 ### Added

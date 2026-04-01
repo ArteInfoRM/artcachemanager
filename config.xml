@@ -2,7 +2,7 @@
 <module>
     <name>artcachemanager</name>
     <displayName><![CDATA[Art Cache Manager]]></displayName>
-    <version><![CDATA[1.0.0]]></version>
+    <version><![CDATA[1.0.4]]></version>
     <description><![CDATA[Monitor and clear OPcache and Memcached caches directly from the PrestaShop back-office.]]></description>
     <author><![CDATA[Tecnoacquisti.com]]></author>
     <tab><![CDATA[administration]]></tab>

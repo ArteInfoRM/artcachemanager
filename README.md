@@ -1,11 +1,12 @@
 # Art Cache Manager
 
 > PrestaShop module — monitor and clear **OPcache** and **Memcached** directly from the back-office.
+> **Designed for VPS and dedicated servers.** On shared hosting both caches are typically inaccessible or shared across all tenants — see the [Shared hosting considerations](#shared-hosting-considerations) section below.
 
 ![PrestaShop](https://img.shields.io/badge/PrestaShop-1.7%20→%209.1-blue)
 ![PHP](https://img.shields.io/badge/PHP-7.4%20→%208.5-777bb4)
 ![License](https://img.shields.io/badge/license-AFL%203.0-green)
-![Version](https://img.shields.io/badge/version-1.0.0-informational)
+![Version](https://img.shields.io/badge/version-1.0.4-informational)
 
 ---
 
@@ -66,6 +67,36 @@ It is particularly useful on production servers where `opcache.validate_timestam
 - PHP extension **`opcache`** (optional — OPcache panel is hidden if absent)
 - PHP extension **`memcached`** or **`memcache`** (optional — Memcached panel requires it)
 - PrestaShop external cache set to **Memcached** or **Memcache** in *Advanced Parameters → Performance* for the Memcached panel to be active
+
+---
+
+## Shared hosting considerations
+
+> **This module is designed for VPS and dedicated servers** where the operator has full control over the PHP and system configuration. On shared hosting both OPcache and Memcached are typically inaccessible or shared among all tenants, making monitoring and selective clearing impractical or potentially disruptive.
+
+### OPcache on shared hosting
+
+Shared hosting providers often add `opcache_get_status` to `disable_functions` in `php.ini` as a security measure: the function exposes the list of cached files for **all** vhosts on the server, not just your own.
+
+| Function | Blocked by default on shared hosting | Effect on this module |
+|---|---|---|
+| `opcache_get_status` | Often yes | Statistics panel unavailable |
+| `opcache_reset` | Usually no | Clear button still works |
+
+When `opcache_get_status` is blocked but `opcache_reset` is available, the module shows a **"Clear OPcache (blind)"** button with an amber warning. Use it with awareness: `opcache_reset()` resets the compiled-script cache for the **entire server**, not just your site — it temporarily impacts all other sites hosted on the same machine.
+
+> **On a VPS or dedicated server:** remove `opcache_get_status` from `disable_functions` for the domain's PHP-FPM pool to enable full statistics. On shared hosting managed by a third party, leave the restriction in place and use the blind-clear button only when necessary.
+
+### Memcached on shared hosting
+
+Memcached requires a separate system daemon (`memcached`) that must be installed and started at OS level. On shared hosting this daemon is almost always absent or not accessible to individual tenants.
+
+If a Memcached daemon were accessible on a shared server, calling `flush()` would empty the **entire Memcached instance**, clearing cached data for all other sites sharing the same daemon — the same server-wide impact described above for `opcache_reset()`.
+
+| Scenario | OPcache monitoring | OPcache clear | Memcached monitoring | Memcached flush |
+|---|---|---|---|---|
+| VPS / dedicated | ✅ full stats | ✅ this server only | ✅ full stats | ✅ your daemon only |
+| Shared hosting | ❌ disable_functions | ⚠️ entire server | ❌ daemon absent | ⚠️ entire shared daemon |
 
 ---
 
