@@ -112,12 +112,15 @@ class Artcachemanager extends Module
         $opcache   = $this->getOpcacheStatus();
         $memcached = $this->getMemcachedInfo();
 
-        // Pre-format byte values so the template stays simple
+        // Pre-format byte values and compute CSS color classes in PHP so the
+        // template never needs to put dynamic values inside style="" attributes.
         if ($opcache['available'] && $opcache['enabled']) {
-            $opcache['memory_total_fmt']   = $this->formatBytes($opcache['memory_total']);
-            $opcache['memory_used_fmt']    = $this->formatBytes($opcache['memory_used']);
-            $opcache['memory_free_fmt']    = $this->formatBytes($opcache['memory_free']);
-            $opcache['memory_wasted_fmt']  = $this->formatBytes($opcache['memory_wasted']);
+            $opcache['memory_total_fmt']  = $this->formatBytes($opcache['memory_total']);
+            $opcache['memory_used_fmt']   = $this->formatBytes($opcache['memory_used']);
+            $opcache['memory_free_fmt']   = $this->formatBytes($opcache['memory_free']);
+            $opcache['memory_wasted_fmt'] = $this->formatBytes($opcache['memory_wasted']);
+            $opcache['bar_color_class']   = $this->pctColorClass($opcache['used_pct'], false);
+            $opcache['hit_color_class']   = $this->pctColorClass($opcache['hit_rate'], true);
         }
 
         if (!empty($memcached['stats']['servers'])) {
@@ -127,8 +130,12 @@ class Artcachemanager extends Module
                 $srv['uptime_fmt']    = $this->formatUptime((int) $srv['uptime']);
             }
             unset($srv);
-            $memcached['stats']['totals']['bytes_fmt'] = $this->formatBytes(
+            $memcached['stats']['totals']['bytes_fmt']       = $this->formatBytes(
                 (int) $memcached['stats']['totals']['bytes']
+            );
+            $memcached['stats']['totals']['hit_color_class'] = $this->pctColorClass(
+                $memcached['stats']['totals']['hit_rate'],
+                true
             );
         }
 
@@ -408,6 +415,33 @@ class Artcachemanager extends Module
             return [];
         }
         return $data['parameters'];
+    }
+
+    /**
+     * Returns a CSS class name (green / amber / red) for a progress bar.
+     *
+     * @param float $pct      The percentage value (0–100)
+     * @param bool  $highGood true  → high value = good (hit rates)
+     *                        false → high value = bad  (memory usage)
+     */
+    private function pctColorClass(float $pct, bool $highGood): string
+    {
+        if ($highGood) {
+            if ($pct >= 80) {
+                return 'green';
+            }
+            if ($pct >= 50) {
+                return 'amber';
+            }
+            return 'red';
+        }
+        if ($pct > 80) {
+            return 'red';
+        }
+        if ($pct > 60) {
+            return 'amber';
+        }
+        return 'green';
     }
 
     private function formatBytes(int $bytes): string

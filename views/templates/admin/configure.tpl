@@ -16,7 +16,10 @@
 .artcm-badge-warn { background: #fcf8e3; color: #8a6d3b; }
 .artcm-badge-err  { background: #f2dede; color: #a94442; }
 .artcm-progress-wrap { background: #e9ecef; border-radius: 4px; height: 18px; overflow: hidden; margin: 4px 0; }
-.artcm-progress-bar  { height: 100%; border-radius: 4px; transition: width .4s ease; font-size: 11px; line-height: 18px; color: #fff; text-align: right; padding-right: 6px; }
+.artcm-progress-bar  { height: 100%; border-radius: 4px; transition: width .4s ease; font-size: 11px; line-height: 18px; color: #fff; text-align: right; padding-right: 6px; width: 0; }
+.artcm-bar-green { background: #5cb85c; }
+.artcm-bar-amber { background: #f0ad4e; }
+.artcm-bar-red   { background: #d9534f; }
 .artcm-tbl td, .artcm-tbl th { padding: 5px 10px; }
 .artcm-tbl th { font-weight: 600; color: #555; width: 200px; }
 .artcm-note   { font-size: 12px; color: #777; margin-top: 4px; }
@@ -78,11 +81,8 @@
                 {* Memory bar *}
                 <p style="margin-bottom:2px;font-weight:600;">{l s='Memory usage' mod='artcachemanager'}</p>
                 <div class="artcm-progress-wrap">
-                    {assign var="bar_color" value="#5cb85c"}
-                    {if $artcm_opcache.used_pct > 80}{assign var="bar_color" value="#d9534f"}{/if}
-                    {if $artcm_opcache.used_pct > 60}{assign var="bar_color" value="#f0ad4e"}{/if}
-                    <div class="artcm-progress-bar"
-                         style="width:{$artcm_opcache.used_pct|floatval}%; background:{$bar_color};">
+                    <div class="artcm-progress-bar artcm-bar-{$artcm_opcache.bar_color_class|escape:'html':'UTF-8'}"
+                         data-pct="{$artcm_opcache.used_pct|floatval}">
                          {$artcm_opcache.used_pct|floatval}%
                     </div>
                 </div>
@@ -98,11 +98,8 @@
                 {* Hit rate bar *}
                 <p style="margin-bottom:2px;font-weight:600;">{l s='Hit rate' mod='artcachemanager'}</p>
                 <div class="artcm-progress-wrap">
-                    {assign var="hit_color" value="#5cb85c"}
-                    {if $artcm_opcache.hit_rate < 80}{assign var="hit_color" value="#f0ad4e"}{/if}
-                    {if $artcm_opcache.hit_rate < 50}{assign var="hit_color" value="#d9534f"}{/if}
-                    <div class="artcm-progress-bar"
-                         style="width:{$artcm_opcache.hit_rate|floatval}%; background:{$hit_color};">
+                    <div class="artcm-progress-bar artcm-bar-{$artcm_opcache.hit_color_class|escape:'html':'UTF-8'}"
+                         data-pct="{$artcm_opcache.hit_rate|floatval}">
                          {$artcm_opcache.hit_rate|floatval}%
                     </div>
                 </div>
@@ -219,11 +216,8 @@
 
                     {* Hit rate bar *}
                     <div class="artcm-progress-wrap">
-                        {assign var="mc_hit_color" value="#5cb85c"}
-                        {if $totals.hit_rate < 80}{assign var="mc_hit_color" value="#f0ad4e"}{/if}
-                        {if $totals.hit_rate < 50}{assign var="mc_hit_color" value="#d9534f"}{/if}
-                        <div class="artcm-progress-bar"
-                             style="width:{$totals.hit_rate|floatval}%; background:{$mc_hit_color};">
+                        <div class="artcm-progress-bar artcm-bar-{$totals.hit_color_class|escape:'html':'UTF-8'}"
+                             data-pct="{$totals.hit_rate|floatval}">
                              {$totals.hit_rate|floatval}%
                         </div>
                     </div>
@@ -337,3 +331,12 @@
         </form>
     </div>
 </div>
+
+<script>
+(function () {
+    'use strict';
+    document.querySelectorAll('.artcm-progress-bar[data-pct]').forEach(function (el) {
+        el.style.width = parseFloat(el.getAttribute('data-pct')) + '%';
+    });
+}());
+</script>
