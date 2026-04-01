@@ -139,6 +139,9 @@ class Artcachemanager extends Module
             );
         }
 
+        $this->context->controller->addCSS($this->_path . 'views/css/artcachemanager_admin.css');
+        $this->context->controller->addJS($this->_path . 'views/js/artcachemanager_admin.js');
+
         $formAction = AdminController::$currentIndex
             . '&configure=' . $this->name
             . '&token=' . Tools::getAdminTokenLite('AdminModules');

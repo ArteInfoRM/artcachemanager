@@ -9,21 +9,6 @@
  * @version   1.2.0
  *}
 
-<style>
-.artcm-section { margin-bottom: 24px; }
-.artcm-badge   { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; }
-.artcm-badge-ok   { background: #dff0d8; color: #3c763d; }
-.artcm-badge-warn { background: #fcf8e3; color: #8a6d3b; }
-.artcm-badge-err  { background: #f2dede; color: #a94442; }
-.artcm-progress-wrap { background: #e9ecef; border-radius: 4px; height: 18px; overflow: hidden; margin: 4px 0; }
-.artcm-progress-bar  { height: 100%; border-radius: 4px; transition: width .4s ease; font-size: 11px; line-height: 18px; color: #fff; text-align: right; padding-right: 6px; width: 0; }
-.artcm-bar-green { background: #5cb85c; }
-.artcm-bar-amber { background: #f0ad4e; }
-.artcm-bar-red   { background: #d9534f; }
-.artcm-tbl td, .artcm-tbl th { padding: 5px 10px; }
-.artcm-tbl th { font-weight: 600; color: #555; width: 200px; }
-.artcm-note   { font-size: 12px; color: #777; margin-top: 4px; }
-</style>
 
 {* ── Flash messages ─────────────────────────────────────────────────── *}
 {foreach from=$artcm_messages item=msg}
@@ -331,12 +316,3 @@
         </form>
     </div>
 </div>
-
-<script>
-(function () {
-    'use strict';
-    document.querySelectorAll('.artcm-progress-bar[data-pct]').forEach(function (el) {
-        el.style.width = parseFloat(el.getAttribute('data-pct')) + '%';
-    });
-}());
-</script>
