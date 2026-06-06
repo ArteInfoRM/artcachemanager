@@ -471,9 +471,6 @@ class Artcachemanager extends Module
 
     /**
      * Returns a CSS class name (green / amber / red) for a progress bar.
-     *
-     * @param float $pct      The percentage value (0-100)
-     * @param bool  $highGood Whether higher percentages should be treated as good values
      */
     private function pctColorClass(float $pct, bool $highGood): string
     {
