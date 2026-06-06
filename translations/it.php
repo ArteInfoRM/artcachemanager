@@ -1,7 +1,7 @@
 <?php
 
 global $_MODULE;
-$_MODULE = array();
+$_MODULE = [];
 $_MODULE['<{artcachemanager}prestashop>artcachemanager_8bbc12484db1fab2dde2dd35459706fc'] = 'Art Cache Manager';
 $_MODULE['<{artcachemanager}prestashop>artcachemanager_30a4c5e012a81aa764d98dbe6fe4c057'] = 'Monitora e svuota le cache OPcache e Memcached direttamente dal back office di PrestaShop.';
 $_MODULE['<{artcachemanager}prestashop>artcachemanager_558b49eb972c3c62a1a4e5b6d91420ae'] = 'Configurazione salvata.';

@@ -30,6 +30,7 @@ package-lock.json
 # ── Build / dist artefacts ───────────────────────────────────────────────────
 /dist/
 *.zip
+*_validation_*.txt
 
 # ── PrestaShop runtime files (should not be committed) ───────────────────────
 config.xml

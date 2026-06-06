@@ -7,9 +7,9 @@
  * @author    Tecnoacquisti.com <helpdesk@tecnoacquisti.com>
  * @copyright 2009-2026 Tecnoacquisti.com
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License (AFL) v. 3.0
- * @version   1.0.4
+ *
+ * @version   1.0.5
  */
-
 header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
 header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
 

@@ -6,7 +6,7 @@
  * @author    Tecnoacquisti.com <helpdesk@tecnoacquisti.com>
  * @copyright 2009-2026 Tecnoacquisti.com
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License (AFL) v. 3.0
- * @version   1.0.4
+ * @version   1.0.5
  *}
 
 
@@ -19,9 +19,7 @@
 
 <div class="row artcm-section">
 
-{* ================================================================
-   OPcache panel
-================================================================ *}
+{* OPcache panel *}
     <div class="col-lg-6 col-md-12">
         <div class="panel">
             <div class="panel-heading">
@@ -168,9 +166,7 @@
         </div>{* panel *}
     </div>{* col *}
 
-{* ================================================================
-   Memcached panel
-================================================================ *}
+{* Memcached panel *}
     <div class="col-lg-6 col-md-12">
         <div class="panel">
             <div class="panel-heading">
@@ -283,9 +279,7 @@
     </div>{* col *}
 </div>{* row *}
 
-{* ================================================================
-   Configuration panel
-================================================================ *}
+{* Configuration panel *}
 <div class="panel artcm-section">
     <div class="panel-heading">
         <i class="icon-cog"></i>

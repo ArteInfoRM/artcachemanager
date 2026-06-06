@@ -7,9 +7,9 @@
  * @author    Tecnoacquisti.com <helpdesk@tecnoacquisti.com>
  * @copyright 2009-2026 Tecnoacquisti.com
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License (AFL) v. 3.0
+ *
  * @version   1.0.5
  */
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
