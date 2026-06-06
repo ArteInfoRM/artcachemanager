@@ -1,5 +1,5 @@
 /**
- * Art Cache Manager — back-office scripts
+ * Art Cache Manager - back-office scripts
  *
  * @author    Tecnoacquisti.com <helpdesk@tecnoacquisti.com>
  * @copyright 2009-2026 Tecnoacquisti.com

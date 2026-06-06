@@ -6,7 +6,7 @@
 ![PrestaShop](https://img.shields.io/badge/PrestaShop-1.7%20→%209.1-blue)
 ![PHP](https://img.shields.io/badge/PHP-7.4%20→%208.5-777bb4)
 ![License](https://img.shields.io/badge/license-AFL%203.0-green)
-![Version](https://img.shields.io/badge/version-1.0.4-informational)
+![Version](https://img.shields.io/badge/version-1.0.5-informational)
 
 ---
 
@@ -46,8 +46,8 @@ It is particularly useful on production servers where `opcache.validate_timestam
 
 ### Configuration
 
-- **Clear OPcache with PS cache** — automatically resets OPcache whenever PrestaShop clears its cache (hooks: `actionClearCache`, `actionAdminPerformanceSave`)
-- **Flush Memcached with PS cache** — same trigger; disabled in the UI when Memcached is not active
+- **Clear OPcache with PS cache** — automatically resets OPcache whenever PrestaShop clears its cache or module lifecycle events run
+- **Flush Memcached with PS cache** — same trigger set; disabled in the UI when Memcached is not active
 
 ---
 
@@ -134,8 +134,11 @@ When the **auto-clear** options are enabled, the module listens to:
 |---|---|
 | `actionClearCache` | Programmatic cache clears in PS 1.7.7+ |
 | `actionAdminPerformanceSave` | Saving the Performance admin page |
+| `actionModuleInstallAfter` | A module has just been installed |
+| `actionModuleUpgradeAfter` | A module has just been upgraded |
+| `actionModuleUninstallAfter` | A module has just been uninstalled |
 
-Both hooks call `opcache_reset()` and/or `Cache::getInstance()->flush()` depending on which options are active.
+These hooks call `opcache_reset()` and/or `Cache::getInstance()->flush()` depending on which options are active.
 
 ---
 
@@ -145,6 +148,11 @@ Both hooks call `opcache_reset()` and/or `Cache::getInstance()->flush()` dependi
 artcachemanager/
 ├── artcachemanager.php              Main module class
 ├── config.xml                       Module metadata
+├── translations/
+│   ├── en.php                       English legacy translations
+│   └── it.php                       Italian legacy translations
+├── upgrade/
+│   └── upgrade-1.0.5.php            Hook registration for existing installs
 ├── views/
 │   └── templates/
 │       └── admin/

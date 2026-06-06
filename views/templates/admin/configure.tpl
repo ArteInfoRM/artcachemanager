@@ -6,11 +6,11 @@
  * @author    Tecnoacquisti.com <helpdesk@tecnoacquisti.com>
  * @copyright 2009-2026 Tecnoacquisti.com
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License (AFL) v. 3.0
- * @version   1.2.0
+ * @version   1.0.4
  *}
 
 
-{* ── Flash messages ─────────────────────────────────────────────────── *}
+{* Flash messages *}
 {foreach from=$artcm_messages item=msg}
 <div class="alert alert-{$msg.type|escape:'html':'UTF-8'}" role="alert">
     {$msg.text|escape:'html':'UTF-8'}
@@ -19,9 +19,9 @@
 
 <div class="row artcm-section">
 
-{* ═══════════════════════════════════════════════════════════════════
+{* ================================================================
    OPcache panel
-═══════════════════════════════════════════════════════════════════ *}
+================================================================ *}
     <div class="col-lg-6 col-md-12">
         <div class="panel">
             <div class="panel-heading">
@@ -36,11 +36,11 @@
                     {if $artcm_opcache.reason == 'extension_not_loaded'}
                         {l s='OPcache extension is not loaded (opcache.so / zend_extension).' mod='artcachemanager'}
                     {elseif $artcm_opcache.reason == 'restrict_api'}
-                        {l s='OPcache is active but opcache.restrict_api is set — access from this web path is blocked.' mod='artcachemanager'}
+                        {l s='OPcache is active but opcache.restrict_api is set - access from this web path is blocked.' mod='artcachemanager'}
                         <br><small><code>opcache.restrict_api = {$artcm_opcache.restrict_api|escape:'html':'UTF-8'}</code></small>
                     {elseif $artcm_opcache.reason == 'disable_functions'}
                         {l s='OPcache extension is loaded but opcache_get_status() is blocked (disable_functions in php.ini).' mod='artcachemanager'}
-                        <br><small>{l s='This is common on shared hosting — the host disables monitoring functions for security. Statistics are unavailable.' mod='artcachemanager'}</small>
+                        <br><small>{l s='This is common on shared hosting - the host disables monitoring functions for security. Statistics are unavailable.' mod='artcachemanager'}</small>
                     {else}
                         {l s='OPcache is disabled (opcache.enable=0 in php.ini / vhost).' mod='artcachemanager'}
                     {/if}
@@ -57,7 +57,7 @@
                 {* validate_timestamps notice *}
                 {if !$artcm_opcache.validate_timestamps}
                 <div class="alert alert-info" style="font-size:12px;padding:8px 12px;">
-                    <strong>{l s='opcache.validate_timestamps = 0' mod='artcachemanager'}</strong> —
+                    <strong>{l s='opcache.validate_timestamps = 0' mod='artcachemanager'}</strong> -
                     {l s='PHP will NOT auto-detect file changes. Use the Clear button after every deploy.' mod='artcachemanager'}
                 </div>
                 {/if}
@@ -168,9 +168,9 @@
         </div>{* panel *}
     </div>{* col *}
 
-{* ═══════════════════════════════════════════════════════════════════
+{* ================================================================
    Memcached panel
-═══════════════════════════════════════════════════════════════════ *}
+================================================================ *}
     <div class="col-lg-6 col-md-12">
         <div class="panel">
             <div class="panel-heading">
@@ -183,11 +183,11 @@
 
                 <div class="alert alert-info">
                     {if $artcm_memcached.reason == 'ps_cache_disabled'}
-                        {l s='PrestaShop external cache is disabled (Admin → Performance).' mod='artcachemanager'}
+                        {l s='PrestaShop external cache is disabled (Admin > Performance).' mod='artcachemanager'}
                     {elseif $artcm_memcached.reason == 'not_memcached'}
                         {l s='Active cache system:' mod='artcachemanager'}
                         <strong>{$artcm_memcached.system|default:'none'|escape:'html':'UTF-8'}</strong>
-                        — {l s='not Memcached/Memcache.' mod='artcachemanager'}
+                        - {l s='not Memcached/Memcache.' mod='artcachemanager'}
                     {else}
                         {l s='Memcached/Memcache is not active.' mod='artcachemanager'}
                     {/if}
@@ -283,13 +283,13 @@
     </div>{* col *}
 </div>{* row *}
 
-{* ═══════════════════════════════════════════════════════════════════
+{* ================================================================
    Configuration panel
-═══════════════════════════════════════════════════════════════════ *}
+================================================================ *}
 <div class="panel artcm-section">
     <div class="panel-heading">
         <i class="icon-cog"></i>
-        {l s='Configuration — auto-clear on PrestaShop cache flush' mod='artcachemanager'}
+        {l s='Configuration - auto-clear on PrestaShop cache flush' mod='artcachemanager'}
     </div>
     <div class="panel-body">
         <p style="color:#555;margin-bottom:16px;">
@@ -323,7 +323,7 @@
                 </label>
                 {if !$artcm_memcached.active}
                 <p class="help-block artcm-note" style="color:#a94442;">
-                    {l s='(Memcached/Memcache is not active — this option has no effect)' mod='artcachemanager'}
+                    {l s='(Memcached/Memcache is not active - this option has no effect)' mod='artcachemanager'}
                 </p>
                 {/if}
             </div>

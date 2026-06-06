@@ -7,6 +7,19 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [1.0.5] — 2026-06-06
+
+### Added
+- Auto-clear now also runs after module install, upgrade, and uninstall events through `actionModuleInstallAfter`, `actionModuleUpgradeAfter`, and `actionModuleUninstallAfter`
+- Upgrade script `upgrade/upgrade-1.0.5.php` registers the new module lifecycle hooks for existing installations
+- Italian legacy translation file with all strings aligned to the English translation keys
+
+### Changed
+- Module metadata bumped to version `1.0.5`
+- Source headers and legacy guard files aligned to the current module version and PrestaShop coding style
+
+---
+
 ## [1.0.4] — 2026-04-01
 
 ### Added

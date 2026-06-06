@@ -3,12 +3,12 @@
  * Art Cache Manager
  *
  * Monitor and clear OPcache and Memcached directly from the PrestaShop back-office.
- * Compatible with PrestaShop 1.7 → 9.x
+ * Compatible with PrestaShop 1.7 to 9.x
  *
  * @author    Tecnoacquisti.com <helpdesk@tecnoacquisti.com>
  * @copyright 2009-2026 Tecnoacquisti.com
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License (AFL) v. 3.0
- * @version   1.0.4
+ * @version   1.0.5
  */
 
 if (!defined('_PS_VERSION_')) {
@@ -24,7 +24,7 @@ class Artcachemanager extends Module
     {
         $this->name          = 'artcachemanager';
         $this->tab           = 'administration';
-        $this->version       = '1.0.4';
+        $this->version       = '1.0.5';
         $this->author        = 'Tecnoacquisti.com';
         $this->need_instance = 0;
         $this->bootstrap     = true;
@@ -38,13 +38,16 @@ class Artcachemanager extends Module
         $this->ps_versions_compliancy = ['min' => '1.7.0', 'max' => _PS_VERSION_];
     }
 
-    /* ── lifecycle ──────────────────────────────────────────────────── */
+    /* Lifecycle */
 
     public function install()
     {
         return parent::install()
             && $this->registerHook('actionClearCache')
             && $this->registerHook('actionAdminPerformanceSave')
+            && $this->registerHook('actionModuleInstallAfter')
+            && $this->registerHook('actionModuleUpgradeAfter')
+            && $this->registerHook('actionModuleUninstallAfter')
             && Configuration::updateValue(self::CFG_OPCACHE_WITH_PS, 0)
             && Configuration::updateValue(self::CFG_MEMCACHED_WITH_PS, 0);
     }
@@ -56,7 +59,7 @@ class Artcachemanager extends Module
             && Configuration::deleteByName(self::CFG_MEMCACHED_WITH_PS);
     }
 
-    /* ── hooks ──────────────────────────────────────────────────────── */
+    /* Hooks */
 
     /**
      * Fired by PS when cache is cleared programmatically (PS 1.7.7+).
@@ -74,6 +77,30 @@ class Artcachemanager extends Module
         $this->autoClear();
     }
 
+    /**
+     * Fired after a module is installed.
+     */
+    public function hookActionModuleInstallAfter($params)
+    {
+        $this->autoClear();
+    }
+
+    /**
+     * Fired after a module is upgraded.
+     */
+    public function hookActionModuleUpgradeAfter($params)
+    {
+        $this->autoClear();
+    }
+
+    /**
+     * Fired after a module is uninstalled.
+     */
+    public function hookActionModuleUninstallAfter($params)
+    {
+        $this->autoClear();
+    }
+
     private function autoClear()
     {
         if ((int) Configuration::get(self::CFG_OPCACHE_WITH_PS)) {
@@ -84,7 +111,7 @@ class Artcachemanager extends Module
         }
     }
 
-    /* ── admin configure page ───────────────────────────────────────── */
+    /* Admin configure page */
 
     public function getContent()
     {
@@ -170,7 +197,7 @@ class Artcachemanager extends Module
         );
     }
 
-    /* ── OPcache ────────────────────────────────────────────────────── */
+    /* OPcache */
 
     public function getOpcacheStatus(): array
     {
@@ -179,7 +206,7 @@ class Artcachemanager extends Module
             if (!extension_loaded('Zend OPcache')) {
                 return ['available' => false, 'reason' => 'extension_not_loaded'];
             }
-            // Extension IS loaded — function blocked at ini level
+            // Extension is loaded, but the function is blocked at ini level.
             $restrictApi = ini_get('opcache.restrict_api');
             if ($restrictApi !== '' && $restrictApi !== false) {
                 return [
@@ -238,7 +265,7 @@ class Artcachemanager extends Module
         return (bool) opcache_reset();
     }
 
-    /* ── Memcached ──────────────────────────────────────────────────── */
+    /* Memcached */
 
     public function getMemcachedInfo(): array
     {
@@ -369,7 +396,7 @@ class Artcachemanager extends Module
             return false;
         }
 
-        // Prefer PS Cache facade — it uses the already-configured connection
+        // Prefer PS Cache facade because it uses the already-configured connection.
         try {
             if (class_exists('Cache') && method_exists('Cache', 'getInstance')) {
                 $cache = Cache::getInstance();
@@ -413,7 +440,7 @@ class Artcachemanager extends Module
         return false;
     }
 
-    /* ── helpers ────────────────────────────────────────────────────── */
+    /* Helpers */
 
     /**
      * Returns the Symfony parameters array from app/config/parameters.php.
@@ -440,9 +467,9 @@ class Artcachemanager extends Module
     /**
      * Returns a CSS class name (green / amber / red) for a progress bar.
      *
-     * @param float $pct      The percentage value (0–100)
-     * @param bool  $highGood true  → high value = good (hit rates)
-     *                        false → high value = bad  (memory usage)
+     * @param float $pct      The percentage value (0-100)
+     * @param bool  $highGood true = high value is good (hit rates)
+     *                        false = high value is bad (memory usage)
      */
     private function pctColorClass(float $pct, bool $highGood): string
     {
