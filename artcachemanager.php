@@ -82,7 +82,7 @@ class Artcachemanager extends Module
      */
     public function hookActionModuleInstallAfter($params)
     {
-        $this->autoClear();
+        $this->autoClearAfterModuleLifecycle($params);
     }
 
     /**
@@ -90,7 +90,7 @@ class Artcachemanager extends Module
      */
     public function hookActionModuleUpgradeAfter($params)
     {
-        $this->autoClear();
+        $this->autoClearAfterModuleLifecycle($params);
     }
 
     /**
@@ -98,6 +98,15 @@ class Artcachemanager extends Module
      */
     public function hookActionModuleUninstallAfter($params)
     {
+        $this->autoClearAfterModuleLifecycle($params);
+    }
+
+    private function autoClearAfterModuleLifecycle($params)
+    {
+        if ($this->isCurrentModuleLifecycleEvent($params)) {
+            return;
+        }
+
         $this->autoClear();
     }
 
@@ -109,6 +118,35 @@ class Artcachemanager extends Module
         if ((int) Configuration::get(self::CFG_MEMCACHED_WITH_PS)) {
             $this->clearMemcached();
         }
+    }
+
+    private function isCurrentModuleLifecycleEvent($params): bool
+    {
+        if (!is_array($params)) {
+            return false;
+        }
+
+        foreach (['module', 'object'] as $key) {
+            if (!isset($params[$key]) || !is_object($params[$key])) {
+                continue;
+            }
+
+            if (isset($params[$key]->name) && (string) $params[$key]->name === $this->name) {
+                return true;
+            }
+        }
+
+        foreach (['module_name', 'name'] as $key) {
+            if (isset($params[$key]) && (string) $params[$key] === $this->name) {
+                return true;
+            }
+        }
+
+        if (isset($params['id_module']) && (int) $params['id_module'] === (int) $this->id) {
+            return true;
+        }
+
+        return false;
     }
 
     /* Admin configure page */
